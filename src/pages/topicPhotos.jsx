@@ -19,7 +19,7 @@ export default view(() => {
                 setTopicPhotos(appStore.collections[indexOfTopic].photos)
             }
         })
-    }, [appStore.collections])
+    }, [topicName])
 
     return (
         <Layout 
