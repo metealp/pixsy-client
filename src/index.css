@@ -7,6 +7,11 @@
     background: radial-gradient(at bottom, rgba(0, 138, 171, 0.05) 0%, rgba(0, 138, 171, 0.34) 100%);
 }
 
+.ant-layout .innerLayoutContainer .ant-layout-content {
+    padding: 20px 40px;
+    overflow: auto;
+}
+
 .spinContainer {
     height: 50%;
     display: flex;
@@ -17,4 +22,27 @@
 .sideNavMenu .ant-menu-item {
     height: 35px;
     line-height: 35px;
+}
+
+.photoGridCol {
+    text-align: center;
+}
+
+.placeholderImage {
+    filter: blur(10px);
+}
+
+.topicInfoContainer {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    padding: 5px 20px;
+    color: black;
+    flex-direction: column;
+}
+
+.topicMatchInfo {
+    color: darkgray;
+    font-size: 0.8rem;
+    font-style: italic;
 }
