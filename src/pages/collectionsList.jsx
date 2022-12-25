@@ -1,24 +1,32 @@
 import { useState } from 'react'
 import { Link } from "react-router-dom";
 
-import { view } from '@risingstack/react-easy-state';
+import { view, autoEffect } from '@risingstack/react-easy-state';
 
-// import { appStore } from "../store";
+import { appStore } from "../store/appStore";
 
-export const CollectionsList = view(() => {
-    const [count, setCount] = useState(0)
+export default view(() => {
+    const [topics, setTopics] = useState([])
 
-    // useEffect(() => {
-    //     appStore.fetchTopics()
-    // }, [])
+    autoEffect(() => {
+        console.log('useEffect called')
+        appStore.fetchTopics()
+        .then(() => {
+            setTopics(appStore.topics)
+        })
+    }, [appStore.topics])
 
     return (
         <>
-            <div>CollectionsList</div>
-            <Link to="architecture">architecture</Link>
-            <button onClick={() => setCount((count) => count + 1)}>
-                count is {count}
-            </button>
+            <ul>
+                {topics &&
+                    topics.map((topic) => (
+                        <li>
+                            <Link to={`/topic/${topic.display}`} key={topic.display}>{topic.display}</Link>
+                        </li>
+                    ))
+                }
+            </ul>
         </>
     )
 })

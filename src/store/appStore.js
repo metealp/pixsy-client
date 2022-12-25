@@ -1,4 +1,4 @@
-import { getBaseUrl } from "../lib/serverConnection";
+import { getBaseUrl, getSharedRequestOptions } from "../lib/serverConnection";
 import { store } from '@risingstack/react-easy-state';
 
 export const appStore = store({
@@ -11,40 +11,62 @@ export const appStore = store({
     errorMessage: '',
 
     async fetchTopics() {
-        if (!appStore.topics) { //  skip if there is cached topics
-            const response = await fetch(getBaseUrl())
-            console.log(response)
-
-            if (response.status >= 200 && response.status < 300) {
-                appStore.topics = response.body.topics
-            } else {
-                appStore.hasError = true
-                appStore.errorMessage = response.body.message
-            }
+        if (!appStore.topics.length) { //  skip if there is cached topics
+            const options = getSharedRequestOptions()
+            fetch(getBaseUrl(), options)
+            .then(response => {
+                if (response.ok) {
+                    return response.json()
+                }
+                return Promise.reject(response);
+            })
+            .then(data => {
+                appStore.topics = data.topics
+                console.log(appStore.topics)
+            })
+            .catch(response => {
+                response.json().then(json => {
+                    appStore.hasError = true
+                    appStore.errorMessage = json.message
+                })
+            });
         }
     },
 
     async fetchTheCollection(collectionName) {
-        const indexOfCollection = appStore.cachedCollectionNames.indexOf(collectionName)
-        if (!(collections && indexOfCollection != -1)) { //  skip if the collection is cached
-            const response = await fetch(getBaseUrl() + collectionName)
-            if (response.status >= 200 && response.status < 300) {
+        const indexOfCollection = appStore.findIndexOfTopic(collectionName)
+        if (!(appStore.collections && indexOfCollection != -1)) { //  skip if the collection is cached
+            const options = getSharedRequestOptions()
+            fetch(getBaseUrl() + 'topic/' + collectionName, options)
+            .then(response => {
+                if (response.ok) {
+                    return response.json()
+                }
+                return Promise.reject(response);
+            })
+            .then(data => {
                 appStore.collections.push({
                     topic: collectionName,
-                    photos: response.body.photos
+                    photos: data.photos
                 })
                 appStore.cachedCollectionNames.push(collectionName)
-            } else {
-                appStore.hasError = true
-                appStore.errorMessage = response.body.message //  all error messages handled on backend
-            }
-
+            })
+            .catch(response => {
+                response.json().then(json => {
+                    appStore.hasError = true
+                    appStore.errorMessage = json.message
+                })
+            });
         }
     },
 
     clearErrorState() {
-        collectionStore.hasError = false
-        collectionStore.errorMessage = ''
+        appStore.hasError = false
+        appStore.errorMessage = ''
+    },
+
+    findIndexOfTopic(collectionName) {
+        return appStore.cachedCollectionNames.indexOf(collectionName)
     }
 
 })
