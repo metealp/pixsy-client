@@ -2,8 +2,9 @@ import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { view, autoEffect } from '@risingstack/react-easy-state'
-import { Spin } from 'antd';
 
+import Layout from "../components/layout"
+import SideNav from "../components/sideNav"
 import { appStore } from "../store/appStore"
 
 export default view(() => {
@@ -21,15 +22,21 @@ export default view(() => {
     }, [appStore.collections])
 
     return (
-        appStore.isLoading ?
-        <Spin tip="Loading">
-            <div className="content" />
-        </Spin> :
-        <>
-            <div>{topicName}</div>
-            {topicPhotos &&
-                topicPhotos.map((photo) => <img width={"200px"} height={"200px"} key={photo.id} src={photo.url}></img>)
+        <Layout 
+            sider={<SideNav />}
+            main={
+                <>
+                    {topicPhotos &&
+                        topicPhotos.map((photo) => {
+                            return (
+                                <img width={"200px"} height={"200px"} key={photo.id} src={photo.url} />
+                            )
+                        })
+                    }
+                </>
             }
-        </>
+        />
+
+
     )
 })
