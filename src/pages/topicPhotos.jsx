@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { view, autoEffect } from '@risingstack/react-easy-state'
+import { Spin } from 'antd';
 
 import { appStore } from "../store/appStore"
 
@@ -20,6 +21,10 @@ export default view(() => {
     }, [appStore.collections])
 
     return (
+        appStore.isLoading ?
+        <Spin tip="Loading">
+            <div className="content" />
+        </Spin> :
         <>
             <div>{topicName}</div>
             {topicPhotos &&
