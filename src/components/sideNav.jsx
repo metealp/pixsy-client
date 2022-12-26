@@ -5,6 +5,7 @@ import { view, autoEffect } from '@risingstack/react-easy-state'
 import { Menu } from 'antd'
 
 import { appStore } from "../store/appStore"
+import LoadingSpinner from "../components/spinner";
 
 export default view(() => {
     const [topics, setTopics] = useState([])
@@ -26,14 +27,16 @@ export default view(() => {
     }));
 
     return (
-        <Menu
-            mode="inline"
-            style={{
-                height: '100%',
-            }}
-            items={items}
-            selectedKeys={[topicName]}
-            className='sideNavMenu'
-        />
+        appStore.areTopicsLoading
+            ? <LoadingSpinner />
+            : <Menu
+                mode="inline"
+                style={{
+                    height: '100%',
+                }}
+                items={items}
+                selectedKeys={[topicName]}
+                className='sideNavMenu'
+            />
     )
 })

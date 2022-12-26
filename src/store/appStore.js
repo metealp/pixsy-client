@@ -5,13 +5,14 @@ export const appStore = store({
     topics: [],
     collections: [],
     cachedCollectionNames: [], //  search in hydrated collections
-    isLoading: true,
+    isCollectionLoading: true,
+    areTopicsLoading: true,
     hasError: false,
     errorMessage: '',
 
     async fetchTopics() {
         if (!appStore.topics.length) { //  skip if there is cached topics
-            appStore.isLoading = true
+            appStore.areTopicsLoading = true
             const options = getSharedRequestOptions()
             fetch(getBaseUrl(), options)
             .then(response => {
@@ -30,7 +31,7 @@ export const appStore = store({
                 })
             })
             .finally(() => {
-                appStore.isLoading = false
+                appStore.areTopicsLoading = false
             })
         }
     },
@@ -38,7 +39,7 @@ export const appStore = store({
     async fetchTheCollection(collectionName) {
         const indexOfCollection = appStore.findIndexOfTopic(collectionName)
         if (!(appStore.collections && indexOfCollection != -1)) { //  skip if the collection is cached
-            appStore.isLoading = true
+            appStore.isCollectionLoading = true
             const options = getSharedRequestOptions()
             fetch(getBaseUrl() + 'topic/' + collectionName, options)
             .then(response => {
@@ -61,7 +62,7 @@ export const appStore = store({
                 })
             })
             .finally(() => {
-                appStore.isLoading = false
+                appStore.isCollectionLoading = false
             })
         }
     },

@@ -1,18 +1,13 @@
 import { Link } from "react-router-dom";
 
-import { Layout, Spin, Space, Image, Col, Row } from 'antd'
-import { HeartFilled, LoadingOutlined } from '@ant-design/icons'
+import { Layout, Space, Image, Col, Row } from 'antd'
+import { HeartFilled } from '@ant-design/icons'
 import { view } from '@risingstack/react-easy-state'
-
-import { appStore } from "../store/appStore"
 
 const { Header, Footer, Sider, Content } = Layout
 
 export default view((props) => {
-    const antIcon = <LoadingOutlined style={{ fontSize: 96 }} spin />;
-    const content = appStore.isLoading
-        ? <div className='spinContainer'><Spin indicator={antIcon} /></div>
-        : props.main    
+    const content = props.main
     const sideNav = props.sider ? <Sider className='layoutSideNav'>{props.sider}</Sider> : <Space />
 
     return (
