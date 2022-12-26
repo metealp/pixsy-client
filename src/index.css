@@ -111,3 +111,16 @@
 .coverContainer .ant-image .ant-image-img {
     height: 100% !important;
 }
+
+.topicImage {
+    box-shadow: 2px 4px rgb(185 187 182 / 85%);
+    cursor: pointer;
+}
+
+.topicPhotoModal .ant-modal-content {
+    padding-top: 40px;
+}
+
+.topicPhotoModal .ant-modal-title {
+    text-align: center;
+}
