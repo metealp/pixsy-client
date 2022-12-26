@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { view, autoEffect } from '@risingstack/react-easy-state'
-import { Image, Modal, Row, Col, Card } from "antd";
+import { Image, Modal, Tag, Card, Divider } from "antd";
 
 import Layout from "../components/layout"
 import Grid from "../components/grid";
@@ -89,8 +89,28 @@ export default view(() => {
                         >
                             <Card.Meta 
                                 title={modalPhoto.title}
-                                description={modalPhoto.description ?? `Buy this nice image of artist #${modalPhoto.user}`}
+                                description={
+                                    <>
+                                        {modalPhoto.description}
+                                        <Divider />
+                                        {`Buy this nice image of artist #${modalPhoto.user}`}
+                                    </>
+                                }
                             />
+
+                            <Divider />
+                            {modalPhoto.topics &&
+                                modalPhoto.topics.map(topic => {
+                                    const colors = ["purple", "geekblue", "magenta", "red", "orange", "lime", "cyan"];
+                                    return (
+                                        <Tag
+                                            color={colors[Math.floor(Math.random() * colors.length)]}
+                                        >
+                                            {topic}
+                                        </Tag>
+                                    )
+                                })
+                            }
                         </Card>
                     </Modal>
                 </>
